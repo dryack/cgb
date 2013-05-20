@@ -6,7 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <boost/lexical_cast.hpp>
-// #include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/classification.hpp>
 // #include <locale>  //not being used currently - will be later
 
 using boost::lexical_cast;
