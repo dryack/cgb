@@ -18,7 +18,7 @@ const unsigned long int MiB = 1048576;
 const unsigned long int KiB = 1024;
 
 int main(int ac, char* av[]) {
-	//	locale loc;
+	locale loc;
 
         if (ac > 1) {
                 std::vector<std::string> args(av, av+ac);
