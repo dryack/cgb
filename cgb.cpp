@@ -30,6 +30,6 @@ int main(int ac, char* av[]) {
                 } //for
         } //if
         else
-                std::cout << "Usage: " << av[0] << " <NUMBER..>" << std::endl;
+                std::cout << "Usage: " << av[0] << " <NUMBER 1> .. <NUMBER N>" << std::endl;
 
 } //main
