@@ -1,0 +1,5 @@
+-add option process via argp or boost::program_options
+-self documenting options, etc
+-conversion to KiB and MiB via options
+-accept input via pipe
+-alternate output formatting options?
