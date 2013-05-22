@@ -1,0 +1,5 @@
+Currently compiling with:  g++ -Os -o cgb cgb.cpp -I/usr/local/include/boost/ /usr/lib64/libboost_program_options.so
+
+-Os results in smaller file - the expense in speed is surely irrelevant in a program this simple.
+
+For build to be successful the linker must be able to find libboost_program_options as well as the boost headers.
