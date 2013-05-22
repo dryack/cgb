@@ -1,6 +1,6 @@
--add option process via argp or boost::program_options
--self documenting options, etc
--conversion to KiB and MiB via options
+[done]	-add option process via argp or boost::program_options
+[done]	-self documenting options, etc
+[done]	-conversion to KiB and MiB via options
 -accept input via pipe
 -alternate output formatting options?
 	-user specified precision
