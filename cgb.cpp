@@ -60,8 +60,6 @@ int main(int ac, char** av) {
       			return ERROR_IN_COMMAND_LINE; 
     		} //catch errs
  
- // application code here // 
-//if (ac > 1) {
                 if (vm.count("GiB")) {
                         std::vector<std::string> args(av, av+ac);
 			int i;
@@ -98,10 +96,6 @@ int main(int ac, char** av) {
                                 std::cout << i << ": " << setiosflags(ios::fixed) << setprecision(2) << r << "GiB" << std::endl;
                         } //for
                 } //else - defaulting to GiB
-        //} //if
-        //else
-        //        std::cout << "Usage: " << av[0] << " <NUMBER 1> .. <NUMBER N>" << std::endl;
- 
   	} //try 
 	
 	catch(std::exception& e) { 
