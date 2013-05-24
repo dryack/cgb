@@ -3,4 +3,5 @@
 [done]	-conversion to KiB and MiB via options
 -accept input via pipe
 -alternate output formatting options?
-	-user specified precision
+[done]	-user specified precision
+-permit multiple of -k, -g, -m without breaking
