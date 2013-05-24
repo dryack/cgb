@@ -17,8 +17,8 @@ using namespace boost;
 const unsigned long int GiB = 1073741824;
 const unsigned long int MiB = 1048576;
 const unsigned long int KiB = 1024;
-
-const string progv = "cgb 0.75";
+unsigned int prec = 2; //default precision
+const string progv = "cgb 0.78";
 const string bugaddy = "<git.lamashtu@gmail.com>";
 
 
@@ -32,6 +32,8 @@ namespace
 locale loc;
 
 int main(int ac, char** av) {
+	int i = 1;
+	int n = 1; // for output formatting independent of i in for{} loops
 
 	try  { // Define and parse the program options 
 		namespace po = boost::program_options;
@@ -40,15 +42,16 @@ int main(int ac, char** av) {
       		("help", "Print help messages") 
       		("KiB,k", "display result in KiB") 
       		("MiB,m", "display result in MiB")
-      		("GiB,g", "display result in GiB"); 
+      		("GiB,g", "display result in GiB")
+		("precision,p",po::value<unsigned int>(&prec), "output results with precision of n decimal places"); 
 
  		po::variables_map vm;
     		try { 
       			po::store(po::parse_command_line(ac, av, desc), vm); // can throw 
  	      		/** --help option */ 
       			if ( vm.count("help") || ac == 1) { 
-        			std::cout << std::endl << "cgb" << " [OPTION] NUMBER1 .. [NUMBER N]" << std::endl << desc << std::endl << std::endl << progv << " - Compute GigaBytes:  A kluge that accepts numerical input and spits out the value in Gigabytes, Megabytes, or Kilobytes." << std::endl << std::endl << "Send bug reports to: " << bugaddy; 
-        			return SUCCESS; 
+        			std::cout << std::endl << "cgb" << " [OPTION] NUMBER1 .. [NUMBER N]" << std::endl << desc << std::endl << std::endl << progv << " - Compute GigaBytes:  A kluge that accepts numerical input and spits out the value in Gigabytes, Megabytes, or Kilobytes." << std::endl << std::endl << "Send bug reports to: " << bugaddy << std::endl;
+			return SUCCESS; 
       			} //if --help 
  
       		po::notify(vm); // throws on error, so do after help in case 
@@ -62,38 +65,42 @@ int main(int ac, char** av) {
  
                 if (vm.count("GiB")) {
                         std::vector<std::string> args(av, av+ac);
-			int i;
-                        for (i = 2; i < ac; i++) {
+			if (vm.count("precision")) { i++;} //account for precision being on the command line
+                        for (i++; i < ac; i++) {
                                 args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]) / (double)GiB;
-                                std::cout << i << ": " << setiosflags(ios::fixed) << setprecision(2) << r << "GiB" << std::endl;
+                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
+				n++;
                         } //for
                 } //if vm.count
                 else if (vm.count("MiB")) {
 			std::vector<std::string> args(av, av+ac);
-                        int i;
-                        for (i = 2; i < ac; i++) {
-                                args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+                        if (vm.count("precision")) { i++;} //account for precision being on the command line
+                        for (i++; i < ac; i++) { 
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]) / (double)MiB;
-                                std::cout << i << ": " << setiosflags(ios::fixed) << setprecision(2) << r << "MiB" << std::endl;
+                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
+				n++;
                         } //for
                 } //else if m
                 else if (vm.count("KiB")) {
                         std::vector<std::string> args(av, av+ac);
-			int i;
-                        for (i = 2; i < ac; i++) {
+			if (vm.count("precision")) { i++;} //account for precision being on the command line
+                        for (i++; i < ac; i++) {
                                 args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]) / (double)KiB;
-                                std::cout << i << ": " << setiosflags(ios::fixed) << setprecision(2) << r << "KiB" << std::endl;
+                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
+				n++;
                         } //for
                 } //else if k
                 else {
                         std::vector<std::string> args(av, av+ac);
-			int i;
-                        for (i = 1; i < ac; i++) {
+			if (vm.count("precision")) { i++;} //account for precision being on the command line
+                        for (i; i < ac; i++) {
                                 args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]) / (double)GiB;
-                                std::cout << i << ": " << setiosflags(ios::fixed) << setprecision(2) << r << "GiB" << std::endl;
+                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
+				n++;
                         } //for
                 } //else - defaulting to GiB
   	} //try 
