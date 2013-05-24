@@ -50,7 +50,9 @@ int main(int ac, char** av) {
       			po::store(po::parse_command_line(ac, av, desc), vm); // can throw 
  	      		/** --help option */ 
       			if ( vm.count("help") || ac == 1) { 
-        			std::cout << std::endl << "cgb" << " [OPTION] NUMBER1 .. [NUMBER N]" << std::endl << desc << std::endl << std::endl << progv << " - Compute GigaBytes:  A kluge that accepts numerical input and spits out the value in Gigabytes, Megabytes, or Kilobytes." << std::endl << std::endl << "Send bug reports to: " << bugaddy << std::endl;
+        			std::cout << std::endl << "cgb" << " [OPTION] [--precision,-p]<arg> NUMBER1 .. [NUMBER N]" << std::endl << desc << std::endl << std::endl \
+				 << progv << " - Compute GigaBytes:  A kluge that accepts numerical input and spits out the value in Gigabytes, Megabytes, or Kilobytes." \
+				 << std::endl << std::endl << "Send bug reports to: " << bugaddy << std::endl;
 			return SUCCESS; 
       			} //if --help 
  
