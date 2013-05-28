@@ -4,4 +4,6 @@
 -accept input via pipe
 -alternate output formatting options?
 [done]	-user specified precision
--permit multiple of -k, -g, -m without breaking
+[partially done]-permit multiple of -k, -g, -m without breaking
+                      - fix multiple long options failing
+                      - fix -option -optionp# failing
