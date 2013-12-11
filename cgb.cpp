@@ -70,7 +70,7 @@ int main(int ac, char** av) {
 			else if (args[1] == "-gkm") {i=2;}
 			else if (args[1] == "-mgk") {i=2;}
 			else if (args[1] == "-mkg") {i=2;}
-			else if ((args[1] == "-g") || (args[1] == "-m") || (args[1] == "-k")) {i=4;} //indicates non-sticky options
+			else {i=4;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
 			if (vm.count("precision")) { i++;} //account for precision being on the command line
 			//  Currently the following forms all work:
 			//	cgb -gmk, cgb -gmkp#, cgb -g -m -k -p#
@@ -92,7 +92,7 @@ int main(int ac, char** av) {
                         std::vector<std::string> args(av, av+ac);
                         if (args[1] == ("-gm")) {i=2;}  //testing for sticky options
                         else if (args[1] == "-mg") {i=2;}
-                        else if ((args[1] == "-g") || (args[1] == "-m")) {i=3;} //indicates non-sticky options
+                        else {i=3;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
                         for (i; i < ac; i++) {
                         	args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
@@ -107,7 +107,7 @@ int main(int ac, char** av) {
                         std::vector<std::string> args(av, av+ac);
                         if (args[1] == ("-gk")) {i=2;}  //testing for sticky options
                         else if (args[1] == "-kg") {i=2;}
-                        else if ((args[1] == "-g") || (args[1] == "-k")) {i=3;} //indicates non-sticky options
+                        else {i=3;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
                         for (i; i < ac; i++) {
                                 args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
@@ -122,7 +122,7 @@ int main(int ac, char** av) {
                         std::vector<std::string> args(av, av+ac);
                         if (args[1] == ("-mk")) {i=2;}  //testing for sticky options
                         else if (args[1] == "-km") {i=2;}
-                        else if ((args[1] == "-k") || (args[1] == "-m")) {i=3;} //indicates non-sticky options
+                        else {i=3;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
                         for (i; i < ac; i++) {
                                 args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
