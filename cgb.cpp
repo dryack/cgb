@@ -47,7 +47,7 @@ const unsigned long int GiB = 1073741824;
 const unsigned long int MiB = 1048576;
 const unsigned long int KiB = 1024;
 unsigned int prec = 2; //default precision
-const string progv = "cgb 0.90";
+const string progv = "cgb 0.91";
 const string bugaddy = "<git.lamashtu@gmail.com>";
 
 int main(int ac, char** av) {
