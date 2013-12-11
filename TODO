@@ -5,5 +5,5 @@
 -alternate output formatting options?
 [done]	-user specified precision
 [partially done]-permit multiple of -k, -g, -m without breaking
-                      - fix multiple long options failing
+                [done]- fix multiple long options failing
                       - fix -option -optionp# failing
