@@ -47,7 +47,7 @@ const unsigned long int GiB = 1073741824;
 const unsigned long int MiB = 1048576;
 const unsigned long int KiB = 1024;
 unsigned int prec = 2; //default precision
-const string progv = "cgb 0.91";
+const string progv = "cgb 0.93";
 const string bugaddy = "<git.lamashtu@gmail.com>";
 
 int main(int ac, char** av) {
@@ -62,6 +62,7 @@ int main(int ac, char** av) {
       		("KiB,k", "display result in KiB") 
       		("MiB,m", "display result in MiB")
       		("GiB,g", "display result in GiB")
+		("enum,e", "enumerate results")
 		("precision,p",po::value<unsigned int>(&prec), "output results with precision of n decimal places");
 
  		po::variables_map vm;
@@ -95,6 +96,7 @@ int main(int ac, char** av) {
 			else if (args[1] == "-mkg") {i=2;}
 			else {i=4;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
 			if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
 			//  Currently the following forms all work:
 			//	cgb -gmk, cgb -gmkp#, cgb -g -m -k -p#
 			//
@@ -103,11 +105,20 @@ int main(int ac, char** av) {
 			for (i; i < ac; i++) {
 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
 				double r = lexical_cast<double>(args[i]) / (double)GiB;
-				std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
-				r = lexical_cast<double>(args[i]) / (double)MiB;
-				std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
-				r = lexical_cast<double>(args[i]) / (double)KiB;
-				std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
+				if (vm.count("enum")) {
+					std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
+					r = lexical_cast<double>(args[i]) / (double)MiB;
+					std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
+					r = lexical_cast<double>(args[i]) / (double)KiB;
+					std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
+				} //if "enum" on cmd line
+				else {
+					std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+					r = lexical_cast<double>(args[i]) / (double)MiB;
+                                        std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+                                        r = lexical_cast<double>(args[i]) / (double)KiB;
+                                        std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+				} //else enumeration wasn't requested
 				n++;
 			} //for
 		} // if -gmk
@@ -117,12 +128,20 @@ int main(int ac, char** av) {
                         else if (args[1] == "-mg") {i=2;}
                         else {i=3;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;}  //acount for enum on cmd line
                         for (i; i < ac; i++) {
                         	args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]) / (double)GiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
-                                r = lexical_cast<double>(args[i]) / (double)MiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
+				if (vm.count("enum")) {
+                                        std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
+                                        r = lexical_cast<double>(args[i]) / (double)MiB;
+                                        std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
+                                } //if "enum" on cmd line
+                                else {  
+					std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+                                        r = lexical_cast<double>(args[i]) / (double)MiB;
+                                        std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+                                } //else enumeration wasn't requested
 				n++;
 			} //for
 		} // if -gm
@@ -132,13 +151,21 @@ int main(int ac, char** av) {
                         else if (args[1] == "-kg") {i=2;}
                         else {i=3;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
                         for (i; i < ac; i++) {
                                 args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]) / (double)GiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
-                                r = lexical_cast<double>(args[i]) / (double)KiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
-                                n++;
+                                if (vm.count("enum")) {
+                                        std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
+                                        r = lexical_cast<double>(args[i]) / (double)KiB;
+                                        std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
+                                } //if "enum" on cmd line
+                                else {
+                                        std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+                                        r = lexical_cast<double>(args[i]) / (double)KiB;
+                                        std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+                                } //else enumeration wasn't requested
+				n++;
                         } //for
                 } // if -gk
 		else if (vm.count("MiB") && vm.count("KiB")) {
@@ -147,52 +174,86 @@ int main(int ac, char** av) {
                         else if (args[1] == "-km") {i=2;}
                         else {i=3;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
                         for (i; i < ac; i++) {
                                 args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]) / (double)MiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
-                                r = lexical_cast<double>(args[i]) / (double)KiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
+				if (vm.count("enum")) {
+                                        std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
+                                        r = lexical_cast<double>(args[i]) / (double)KiB;
+                                        std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
+                                } //if "enum" on cmd line
+                                else {
+                                        std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+                                        r = lexical_cast<double>(args[i]) / (double)KiB;
+                                        std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+                                } //else enumeration wasn't requested
+
                                 n++;
                         } //for
                 } // if -km
                 else if (vm.count("GiB")) {
                         std::vector<std::string> args(av, av+ac);
 			if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
                         for (i++; i < ac; i++) {
                                 args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]) / (double)GiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
+				if (vm.count("enum")) {
+                                        std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
+                                } //if "enum" on cmd line
+                                else {
+                                        std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+                                } //else enumeration wasn't requested
 				n++;
                         } //for
                 } //else if -g
                 else if (vm.count("MiB")) {
 			std::vector<std::string> args(av, av+ac);
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
                         for (i++; i < ac; i++) { 
 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]) / (double)MiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
+				if (vm.count("enum")) {
+                                        std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
+                                } //if "enum" on cmd line
+                                else {  
+                                        std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+                                } //else enumeration wasn't requested
 				n++;
                         } //for
                 } //else if m
                 else if (vm.count("KiB")) {
                         std::vector<std::string> args(av, av+ac);
 			if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
                         for (i++; i < ac; i++) {
                                 args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]) / (double)KiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
+				if (vm.count("enum")) {
+                                        std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
+                                } //if "enum" on cmd line
+                                else {  
+                                        std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+                                } //else enumeration wasn't requested
 				n++;
                         } //for
                 } //else if k
                 else {
                         std::vector<std::string> args(av, av+ac);
 			if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
                         for (i; i < ac; i++) {
                                 args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]) / (double)GiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
+				if (vm.count("enum")) {
+                                        std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
+                                } //if "enum" on cmd line
+                                else {  
+                                        std::cout << setiosflags(ios::fixed) << setprecision(prec) << r << std::endl;
+                                } //else enumeration wasn't requested
+
 				n++;
                         } //for
                 } //else - defaulting to GiB

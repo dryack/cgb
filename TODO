@@ -2,7 +2,9 @@
 [done]	-self documenting options, etc
 [done]	-conversion to KiB and MiB via options
 -accept input via pipe
--alternate output formatting options?
+[partially done] -alternate output formatting options?
+		-defaults to unix type behavior; spits out results and that is all
+		-added "enum" option to return to previous default behavior
 [done]	-user specified precision
 [partially done]-permit multiple of -k, -g, -m without breaking
                 [done]- fix multiple long options failing
