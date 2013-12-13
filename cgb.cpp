@@ -20,20 +20,12 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <locale>
-#include <vector>
-#include <algorithm>
-#include <boost/lexical_cast.hpp>
-#include "boost/program_options.hpp"
-#include <boost/algorithm/string/classification.hpp>
+#include "cgb.h"
 
 using boost::lexical_cast;
 using namespace std;
 using namespace boost;
+
 namespace
 {
   const size_t ERROR_IN_COMMAND_LINE = 1;
@@ -41,17 +33,11 @@ namespace
   const size_t ERROR_UNHANDLED_EXCEPTION = 2;
 
 } // namespace 
+
 locale loc;
 
-const unsigned long int GiB = 1073741824;
-const unsigned long int MiB = 1048576;
-const unsigned long int KiB = 1024;
-unsigned int prec = 2; //default precision
-const string progv = "cgb 0.91";
-const string bugaddy = "<git.lamashtu@gmail.com>";
-
 int main(int ac, char** av) {
-	int i = 1; // outside the for() loops so it can be modified when -p is in use
+	int i = 1; // outside the for() loops so it can be modified when -p and/or -e are in use
 	int n = 1; // for output formatting independent of i in for() loops
 
 	try  { // Define and parse the program options 
@@ -62,6 +48,7 @@ int main(int ac, char** av) {
       		("KiB,k", "display result in KiB") 
       		("MiB,m", "display result in MiB")
       		("GiB,g", "display result in GiB")
+		("enum,e", "enumerate results")
 		("precision,p",po::value<unsigned int>(&prec), "output results with precision of n decimal places");
 
  		po::variables_map vm;
@@ -73,20 +60,20 @@ int main(int ac, char** av) {
 				 << progv << " - Compute GigaBytes:  A kluge that accepts numerical input and spits out the value in Gigabytes, Megabytes, or Kilobytes." \
 				 << std::endl << std::endl << "Send bug reports to: " << bugaddy << std::endl;
 			return SUCCESS; 
-      			} //if --help 
+      			} //if --help or no values given for computation
  
       		po::notify(vm); // throws on error, so do after help in case 
                       // there are any problems 
     		} //try
+    		
     		catch(po::error& e) { 
       			std::cerr << "ERROR: " << e.what() << std::endl << std::endl; 
       			std::cerr << desc << std::endl; 
       			return ERROR_IN_COMMAND_LINE; 
     		} //catch errs
-		// if (vm.count("MiB" && "KiB"))
-		
+    		
+		std::vector<std::string> args(av, av+ac); //vectorize command line for easy processing
 		if (vm.count("GiB") && vm.count("MiB") && vm.count("KiB")) {
-			std::vector<std::string> args(av, av+ac);
 			if (args[1] == ("-gmk")) {i=2;}  //testing for sticky options
 			else if (args[1] == "-kmg") {i=2;}
 			else if (args[1] == "-kgm") {i=2;}
@@ -95,104 +82,233 @@ int main(int ac, char** av) {
 			else if (args[1] == "-mkg") {i=2;}
 			else {i=4;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
 			if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
 			//  Currently the following forms all work:
 			//	cgb -gmk, cgb -gmkp#, cgb -g -m -k -p#
 			//
 			//  The following currently fails:
 			//	cgb -g -m -kp#
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
 			for (i; i < ac; i++) {
 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
-				double r = lexical_cast<double>(args[i]) / (double)GiB;
-				std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
-				r = lexical_cast<double>(args[i]) / (double)MiB;
-				std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
-				r = lexical_cast<double>(args[i]) / (double)KiB;
-				std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+			i = j; //reset i so 2nd loop will work	
+			for (i; i < ac; i++) {
+				
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				double r = lexical_cast<double>(args[i]);
+			
+				if (vm.count("enum")) {
+					resultOut(r, n, GMK, 1, prec, maxlen);
+				} //if "enum" on cmd line
+				
+				else {
+					resultOut(r, n, GMK, 0, prec, maxlen);
+				} //else enumeration wasn't requested
 				n++;
 			} //for
 		} // if -gmk
 		else if (vm.count("GiB") && vm.count("MiB")) {
-                        std::vector<std::string> args(av, av+ac);
                         if (args[1] == ("-gm")) {i=2;}  //testing for sticky options
                         else if (args[1] == "-mg") {i=2;}
                         else {i=3;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
-                        if (vm.count("precision")) { i++;} //account for precision being on the command line
+                        if (vm.count("precision")) { i++;std::vector<std::string> args(av, av+ac);} //account for precision being on the command line
+			if (vm.count("enum")) {i++;}  //acount for enum on cmd line
+			
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+                        i = j; //reset i so 2nd loop will work
                         for (i; i < ac; i++) {
-                        	args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
-                                double r = lexical_cast<double>(args[i]) / (double)GiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
-                                r = lexical_cast<double>(args[i]) / (double)MiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
+                        	
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+                                double r = lexical_cast<double>(args[i]);
+				
+				if (vm.count("enum")) {
+				      resultOut(r, n, GM, 1, prec, maxlen);
+                                } //if "enum" on cmd line
+                                
+                                else {  
+				      resultOut(r, n, GM, 0, prec, maxlen);
+                                } //else enumeration wasn't requested
 				n++;
 			} //for
 		} // if -gm
 		else if (vm.count("GiB") && vm.count("KiB")) {
-                        std::vector<std::string> args(av, av+ac);
                         if (args[1] == ("-gk")) {i=2;}  //testing for sticky options
                         else if (args[1] == "-kg") {i=2;}
                         else {i=3;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
+                        
+                        unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest
+			i = j; //reset i so 2nd loop will work
                         for (i; i < ac; i++) {
-                                args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
-                                double r = lexical_cast<double>(args[i]) / (double)GiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
-                                r = lexical_cast<double>(args[i]) / (double)KiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
-                                n++;
+                                
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+                                double r = lexical_cast<double>(args[i]);
+                                
+				if (vm.count("enum")) {
+                                        resultOut(r, n, GK, 1, prec, maxlen);
+                                } //if "enum" on cmd line
+                                else {
+                                        resultOut(r, n, GK, 0, prec, maxlen);
+                                } //else enumeration wasn't requested
+				n++;
                         } //for
                 } // if -gk
 		else if (vm.count("MiB") && vm.count("KiB")) {
-                        std::vector<std::string> args(av, av+ac);
                         if (args[1] == ("-mk")) {i=2;}  //testing for sticky options
                         else if (args[1] == "-km") {i=2;}
                         else {i=3;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+ 			i = j; //reset i so 2nd loop will work
                         for (i; i < ac; i++) {
-                                args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
-                                double r = lexical_cast<double>(args[i]) / (double)MiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
-                                r = lexical_cast<double>(args[i]) / (double)KiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
+                                
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+                                double r = lexical_cast<double>(args[i]);
+				
+				if (vm.count("enum")) {
+                                        resultOut(r, n, MK, 1, prec, maxlen);
+                                } //if "enum" on cmd line
+                                else {	
+					resultOut(r, n, MK, 0, prec, maxlen);
+                                } //else enumeration wasn't requested
+
                                 n++;
                         } //for
                 } // if -km
                 else if (vm.count("GiB")) {
-                        std::vector<std::string> args(av, av+ac);
 			if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
+			
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+                        i = j; //reset i so 2nd loop will work
                         for (i++; i < ac; i++) {
-                                args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
-                                double r = lexical_cast<double>(args[i]) / (double)GiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
+                                
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+                                double r = lexical_cast<double>(args[i]);
+				
+				if (vm.count("enum")) {
+                                        resultOut(r, n, G, 1, prec, maxlen);
+                                } //if "enum" on cmd line
+                                else {
+                                        resultOut(r, n, G, 0, prec, maxlen);
+                                } //else enumeration wasn't requested
 				n++;
                         } //for
                 } //else if -g
                 else if (vm.count("MiB")) {
-			std::vector<std::string> args(av, av+ac);
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
-                        for (i++; i < ac; i++) { 
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
+			
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
-                                double r = lexical_cast<double>(args[i]) / (double)MiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "MiB" << std::endl;
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+                        i = j; //reset i so 2nd loop will work
+                        for (i++; i < ac; i++) { 
+				
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+                                double r = lexical_cast<double>(args[i]);
+				
+				if (vm.count("enum")) {
+                                        resultOut(r, n, M, 1, prec, maxlen);
+                                } //if "enum" on cmd line
+                                else {  
+                                        resultOut(r, n, M, 0, prec, maxlen);
+                                } //else enumeration wasn't requested
 				n++;
                         } //for
                 } //else if m
                 else if (vm.count("KiB")) {
-                        std::vector<std::string> args(av, av+ac);
 			if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
+			
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+                        i = j; //reset i so 2nd loop will work
                         for (i++; i < ac; i++) {
-                                args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
-                                double r = lexical_cast<double>(args[i]) / (double)KiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "KiB" << std::endl;
+                                
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+                                double r = lexical_cast<double>(args[i]);
+				
+				if (vm.count("enum")) {
+                                        resultOut(r, n, K, 1, prec, maxlen);
+                                } //if "enum" on cmd line
+                                else {  
+                                        resultOut(r, n, K, 0, prec, maxlen);
+                                } //else enumeration wasn't requested
 				n++;
                         } //for
                 } //else if k
                 else {
-                        std::vector<std::string> args(av, av+ac);
 			if (vm.count("precision")) { i++;} //account for precision being on the command line
+			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
+			
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+                        i = j; //reset i so 2nd loop will work
                         for (i; i < ac; i++) {
-                                args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
-                                double r = lexical_cast<double>(args[i]) / (double)GiB;
-                                std::cout << n << ": " << setiosflags(ios::fixed) << setprecision(prec) << r << "GiB" << std::endl;
+                        
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+                                double r = lexical_cast<double>(args[i]);
+				
+				if (vm.count("enum")) {
+                                        resultOut(r, n, G, 1, prec, maxlen);
+                                } //if "enum" on cmd line
+                                else {  
+                                        resultOut(r, n, G, 0, prec, maxlen);
+                                } //else enumeration wasn't requested
+
 				n++;
                         } //for
                 } //else - defaulting to GiB
