@@ -20,16 +20,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <locale>
-#include <vector>
-#include <algorithm>	
-#include <boost/lexical_cast.hpp>
-#include "boost/program_options.hpp"
-#include <boost/algorithm/string/classification.hpp>
 #include "cgb.h"
 
 using boost::lexical_cast;
@@ -45,17 +35,6 @@ namespace
 } // namespace 
 
 locale loc;
-
-// int maxleni(int x, std::vector<std::string> args) {
-// 	int ml = 0; //max string length of any of the numbers being passed args[i]
-//         for (x; x < ac; x++) {
-//         	if (ml < av[x].length) {
-//                 	ml = av[x].length;
-//                 } //if
-//         }// for
-//         return ml;
-// }
-
 
 int main(int ac, char** av) {
 	int i = 1; // outside the for() loops so it can be modified when -p and/or -e are in use
@@ -109,17 +88,26 @@ int main(int ac, char** av) {
 			//
 			//  The following currently fails:
 			//	cgb -g -m -kp#
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+			i = j; //reset i so 2nd loop will work	
 			for (i; i < ac; i++) {
 				
-				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
 				double r = lexical_cast<double>(args[i]);
 			
 				if (vm.count("enum")) {
-					resultOut(r, n, GMK, 1, prec);
+					resultOut(r, n, GMK, 1, prec, maxlen);
 				} //if "enum" on cmd line
 				
 				else {
-					resultOut(r, n, GMK, 0, prec);
+					resultOut(r, n, GMK, 0, prec, maxlen);
 				} //else enumeration wasn't requested
 				n++;
 			} //for
@@ -130,18 +118,27 @@ int main(int ac, char** av) {
                         else {i=3;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
                         if (vm.count("precision")) { i++;std::vector<std::string> args(av, av+ac);} //account for precision being on the command line
 			if (vm.count("enum")) {i++;}  //acount for enum on cmd line
-                        
+			
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+                        i = j; //reset i so 2nd loop will work
                         for (i; i < ac; i++) {
                         	
-				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]);
 				
 				if (vm.count("enum")) {
-				      resultOut(r, n, GM, 1, prec);
+				      resultOut(r, n, GM, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 
                                 else {  
-				      resultOut(r, n, GM, 0, prec);
+				      resultOut(r, n, GM, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
 				n++;
 			} //for
@@ -153,16 +150,25 @@ int main(int ac, char** av) {
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
 			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
                         
+                        unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest
+			i = j; //reset i so 2nd loop will work
                         for (i; i < ac; i++) {
                                 
-				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]);
                                 
 				if (vm.count("enum")) {
-                                        resultOut(r, n, GK, 1, prec);
+                                        resultOut(r, n, GK, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 else {
-                                        resultOut(r, n, GK, 0, prec);
+                                        resultOut(r, n, GK, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
 				n++;
                         } //for
@@ -173,17 +179,25 @@ int main(int ac, char** av) {
                         else {i=3;} //indicates non-sticky options, and verified due to entry else if MiB && KiB
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
 			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
- 			
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+ 			i = j; //reset i so 2nd loop will work
                         for (i; i < ac; i++) {
                                 
-				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]);
 				
 				if (vm.count("enum")) {
-                                        resultOut(r, n, MK, 1, prec);
+                                        resultOut(r, n, MK, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 else {	
-					resultOut(r, n, MK, 0, prec);
+					resultOut(r, n, MK, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
 
                                 n++;
@@ -192,17 +206,26 @@ int main(int ac, char** av) {
                 else if (vm.count("GiB")) {
 			if (vm.count("precision")) { i++;} //account for precision being on the command line
 			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
-                        
+			
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+                        i = j; //reset i so 2nd loop will work
                         for (i++; i < ac; i++) {
                                 
-				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]);
 				
 				if (vm.count("enum")) {
-                                        resultOut(r, n, G, 1, prec);
+                                        resultOut(r, n, G, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 else {
-                                        resultOut(r, n, G, 0, prec);
+                                        resultOut(r, n, G, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
 				n++;
                         } //for
@@ -210,17 +233,26 @@ int main(int ac, char** av) {
                 else if (vm.count("MiB")) {
                         if (vm.count("precision")) { i++;} //account for precision being on the command line
 			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
-                        
+			
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+                        i = j; //reset i so 2nd loop will work
                         for (i++; i < ac; i++) { 
 				
-				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]);
 				
 				if (vm.count("enum")) {
-                                        resultOut(r, n, M, 1, prec);
+                                        resultOut(r, n, M, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 else {  
-                                        resultOut(r, n, M, 0, prec);
+                                        resultOut(r, n, M, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
 				n++;
                         } //for
@@ -228,17 +260,26 @@ int main(int ac, char** av) {
                 else if (vm.count("KiB")) {
 			if (vm.count("precision")) { i++;} //account for precision being on the command line
 			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
-                        
+			
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+                        i = j; //reset i so 2nd loop will work
                         for (i++; i < ac; i++) {
                                 
-				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]);
 				
 				if (vm.count("enum")) {
-                                        resultOut(r, n, K, 1, prec);
+                                        resultOut(r, n, K, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 else {  
-                                        resultOut(r, n, K, 0, prec);
+                                        resultOut(r, n, K, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
 				n++;
                         } //for
@@ -246,17 +287,26 @@ int main(int ac, char** av) {
                 else {
 			if (vm.count("precision")) { i++;} //account for precision being on the command line
 			if (vm.count("enum")) {i++;} //account for enumumerate being on the command line
-                        
+			
+			unsigned int maxlen = 0;
+			unsigned int j = i; //holds i prior to 1st for loop so it can be re-used during 2nd for loop
+			for (i; i < ac; i++) {
+				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+				if (maxlen < args[i].length()) {
+				    maxlen = args[i].length();
+				}
+			}  //clean up args and find the longest 
+                        i = j; //reset i so 2nd loop will work
                         for (i; i < ac; i++) {
                         
-				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
+// 				args[i].erase(std::remove_if(args[i].begin(), args[i].end(), !is_digit()), args[i].end());
                                 double r = lexical_cast<double>(args[i]);
 				
 				if (vm.count("enum")) {
-                                        resultOut(r, n, G, 1, prec);
+                                        resultOut(r, n, G, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 else {  
-                                        resultOut(r, n, G, 0, prec);
+                                        resultOut(r, n, G, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
 
 				n++;
