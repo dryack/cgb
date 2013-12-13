@@ -22,19 +22,30 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <iostream>
 #include <iomanip>
-#include <string>
-#include <locale>
+//#include <string>
+//#include <locale>
 #include <vector>
 #include <algorithm>
-#include <boost/lexical_cast.hpp>
+//#include <boost/lexical_cast.hpp>
 #include "boost/program_options.hpp"
 #include <boost/algorithm/string/classification.hpp>
-#include <iterator>
-#include <boost/concept_check.hpp>
+//#include <iterator>
+//#include <boost/concept_check.hpp>
 
 using boost::lexical_cast;
 using namespace std;
 using namespace boost;
+
+namespace
+{
+  const size_t ERROR_IN_COMMAND_LINE = 1;
+  const size_t SUCCESS = 0;
+  const size_t ERROR_UNHANDLED_EXCEPTION = 2;
+
+} // namespace 
+
+locale loc;
+
 
 const double GiB = 1073741824.0;
 const double MiB = 1048576.0;

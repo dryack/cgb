@@ -22,20 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "cgb.h"
 
-using boost::lexical_cast;
-using namespace std;
-using namespace boost;
-
-namespace
-{
-  const size_t ERROR_IN_COMMAND_LINE = 1;
-  const size_t SUCCESS = 0;
-  const size_t ERROR_UNHANDLED_EXCEPTION = 2;
-
-} // namespace 
-
-locale loc;
-
 int main(int ac, char** av) {
 	int i = 1; // outside the for() loops so it can be modified when -p and/or -e are in use
 	int n = 1; // for output formatting independent of i in for() loops
