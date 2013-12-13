@@ -3,9 +3,11 @@
 [done]	-conversion to KiB and MiB via options
 -accept input via pipe
 [partially done] -alternate output formatting options?
-		-defaults to unix type behavior; spits out results and that is all
-		-added "enum" option to return to previous default behavior
+		[done] -defaults to unix type behavior; spits out results and that is all
+		[done] -added "enum" option to return to previous default behavior
 [done]	-user specified precision
 [partially done]-permit multiple of -k, -g, -m without breaking
                 [done]- fix multiple long options failing
                       - fix -option -optionp# failing
+                      -fix unusual option mixes failing
+                      -fix unusual option mixes that fail without warning/output
