@@ -1,3 +1,6 @@
+SHELL = /bin/sh
+.SUFFIXES:
+.SUFFIXES: .cpp .h .o
 cgb : cgb.o
 	g++ -o cgb cgb.o /usr/lib64/libboost_program_options.so
 
