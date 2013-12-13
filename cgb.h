@@ -22,17 +22,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <iostream>
 #include <iomanip>
-//#include <string>
-//#include <locale>
+#include <unistd.h>
 #include <vector>
 #include <algorithm>
-//#include <boost/lexical_cast.hpp>
 #include "boost/program_options.hpp"
 #include <boost/algorithm/string/classification.hpp>
-//#include <iterator>
-//#include <boost/concept_check.hpp>
 
-using boost::lexical_cast;
 using namespace std;
 using namespace boost;
 
@@ -53,6 +48,21 @@ const double KiB = 1024.0;
 unsigned int prec = 2; //default precision
 const string progv = "cgb 0.99";
 const string bugaddy = "<git.lamashtu@gmail.com>";
+const string licenseS = " The MIT License (MIT)\n Copyright (c) 2013 David Ryack\n \
+Permission is hereby granted, free of charge, to any person obtaining a copy of\n \
+this software and associated documentation files (the \"Software\"), to deal in\n \
+the Software without restriction, including without limitation the rights to\n \
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\n \
+the Software, and to permit persons to whom the Software is furnished to do so,\n \
+subject to the following conditions:\n\n \
+The above copyright notice and this permission notice shall be included in all\n \
+copies or substantial portions of the Software.\n\n \
+THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n \
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\n \
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\n \
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\n \
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\n \
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n";
 
 enum simode_t {GMK = 0, GM = 1, GK = 2, MK = 3, M = 4, K = 5, G = 6};
 

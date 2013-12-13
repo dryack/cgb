@@ -30,7 +30,8 @@ int main(int ac, char** av) {
 		namespace po = boost::program_options;
     		po::options_description desc("Options"); 
     		desc.add_options() 
-      		("help", "Print help message") 
+      		("help", "print help message") 
+		("license", "display license")
       		("KiB,k", "display result in KiB") 
       		("MiB,m", "display result in MiB")
       		("GiB,g", "display result in GiB")
@@ -40,16 +41,20 @@ int main(int ac, char** av) {
  		po::variables_map vm;
     		try { 
       			po::store(po::parse_command_line(ac, av, desc), vm); // can throw 
- 	      		/** --help option */ 
-      			if ( vm.count("help") || ac == 1) { 
+ 	      		//if --help is requested OR the commandline is empty AND no data is being piped in (isatty() )
+      			if ( vm.count("help") || (ac == 1 && isatty(fileno(stdin)))) {  
         			std::cout << std::endl << "cgb" << " [-kmg] [--precision|-p]<arg> NUMBER1 .. [NUMBER N]" << std::endl << desc << std::endl << std::endl \
 				 << progv << " - Compute GigaBytes:  A kluge that accepts numerical input and spits out the value in Gigabytes, Megabytes, or Kilobytes." \
 				 << std::endl << std::endl << "Send bug reports to: " << bugaddy << std::endl;
-			return SUCCESS; 
-      			} //if --help or no values given for computation
- 
-      		po::notify(vm); // throws on error, so do after help in case 
-                      // there are any problems 
+				 return SUCCESS;
+			} //if --help or no values given for computation
+			else if (vm.count("license")){
+				std::cout << std::endl << " " << progv << std::endl << std::endl << licenseS << std::endl;
+				return SUCCESS;
+			}
+			       			 
+			po::notify(vm); // throws on error, so do after help in case 
+				      // there are any problems 
     		} //try
     		
     		catch(po::error& e) { 
