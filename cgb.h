@@ -69,7 +69,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n";
 enum simode_t {GMK = 0, GM = 1, GK = 2, MK = 3, M = 4, K = 5, G = 6};
 
 void resultOut(double x, int y, int z, int a, unsigned int b, unsigned int c) {
-    //x = args[i] passed via r
+    //x = argss[i] passed via r
     //y = i
     //z == simode_t above
     //a == 0 standard output, 1 enumerated output

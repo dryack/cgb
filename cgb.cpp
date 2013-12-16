@@ -24,7 +24,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 int main(int ac, char** av) {
 	int i = 0; // outside the for() loops so it can be modified when -p and/or -e are in use
-	//int n = 1; // for output formatting independent of i in for() loops
 	unsigned int maxlen = 0; //max length of positional arguments; needed for formatting
 	std::vector<std::string> argss; //vector that will be holding arguments (values to be computed)
 	
@@ -83,13 +82,14 @@ int main(int ac, char** av) {
 			}
 			for (i; i < argss.size(); i++) {
 			//strip each positional argument of all non digits
+			//stripping spaces, probably not needed under 99% of cases; was required during more extreme tests
 			argss[i].erase(std::remove_if(argss[i].begin(), argss[i].end(), is_space()), argss[i].end());
 			argss[i].erase(std::remove_if(argss[i].begin(), argss[i].end(), !is_digit()), argss[i].end());
 				if (maxlen < argss[i].length()) {
 					maxlen = argss[i].length();
 				}
 			}
-			removeEmptyStrings(argss);
+			removeEmptyStrings(argss); //another function mostly needed due to extreme cases
  		}
 		else {
      		//vectorize positional arguments
@@ -106,7 +106,6 @@ int main(int ac, char** av) {
 								   //needs to be copied to argss
 		}
 		
-		//find the maximum length of the stripped arguments
 		
 		i = 0;  //reset i for future iterations
 		
@@ -197,8 +196,6 @@ int main(int ac, char** av) {
 			for (i; i < argss.size(); i++) {
                         
                                 double r = lexical_cast<double>(argss[i]);
-				//cout << "r: " << r <<std::endl;
-				//cout << "fuck!  " << argss[i];
 						
 				if (vm.count("enum")) {
                                         resultOut(r, i, G, 1, prec, maxlen);
