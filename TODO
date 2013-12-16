@@ -1,13 +1,18 @@
 [done]	-add option process via argp or boost::program_options
 [done]	-self documenting options, etc
 [done]	-conversion to KiB and MiB via options
--accept input via pipe
+[done] -accept input via pipe
+	-permit delimiter options other than newlines
 [partially done] -alternate output formatting options?
 		[done] -defaults to unix type behavior; spits out results and that is all
 		[done] -added "enum" option to return to previous default behavior
 [done]	-user specified precision
-[partially done]-permit multiple of -k, -g, -m without breaking
+[done]-permit multiple of -k, -g, -m without breaking
                 [done]- fix multiple long options failing
-                      - fix -option -optionp# failing
-                      -fix unusual option mixes failing
-                      -fix unusual option mixes that fail without warning/output
+                     [done]- fix -option -optionp# failing
+                     [done] -fix unusual option mixes failing
+			[done]	-(./cgb -ep<int> # # will cause only the 2nd number to be computed and printed)
+			[done]	-(./cgb --GiB -mk # # will cause only the 2nd number to be computed and printed)
+			[done]	-(./cgb -p<int>e will cause a caught failure - which is probably ok?)
+                    [done]  -fix unusual option mixes that fail without warning/output (./cgb -gmke; -gmkp<int>;  -gmkp<int>e)
+- ./cgb invoked with any option, but without any numbers supplied by pipe or command line will fail with a caught error
