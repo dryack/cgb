@@ -104,6 +104,7 @@ int main(int ac, char** av) {
 			}
 			argss.assign(argsst.begin(),argsst.end()); //due to scoping, this version of the vector
 								   //needs to be copied to argss
+			removeEmptyStrings(argss);
 		}
 		
 		
