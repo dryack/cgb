@@ -48,7 +48,7 @@ const double GiB = 1073741824.0;
 const double MiB = 1048576.0;
 const double KiB = 1024.0;
 unsigned int prec = 2; //default precision
-const string progv = "cgb 0.99b";
+const string progv = "cgb 0.99c";
 const string bugaddy = "<git.lamashtu@gmail.com>";
 const string licenseS = " The MIT License (MIT)\n Copyright (c) 2013 David Ryack\n \
 Permission is hereby granted, free of charge, to any person obtaining a copy of\n \

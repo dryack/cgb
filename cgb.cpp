@@ -23,7 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "cgb.h"
 
 int main(int ac, char** av) {
-	int i = 0; // outside the for() loops so it can be modified when -p and/or -e are in use
+	unsigned int i = 0; // outside the for() loops so it can be modified when -p and/or -e are in use
 	unsigned int maxlen = 0; //max length of positional arguments; needed for formatting
 	std::vector<std::string> argss; //vector that will be holding arguments (values to be computed)
 	
