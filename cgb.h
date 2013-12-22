@@ -48,7 +48,7 @@ const double GiB = 1073741824.0;
 const double MiB = 1048576.0;
 const double KiB = 1024.0;
 unsigned int prec = 2; //default precision
-const string progv = "cgb 0.99c";
+const string progv = "cgb 0.99f";
 const string bugaddy = "<git.lamashtu@gmail.com>";
 const string licenseS = " The MIT License (MIT)\n Copyright (c) 2013 David Ryack\n \
 Permission is hereby granted, free of charge, to any person obtaining a copy of\n \
@@ -182,9 +182,36 @@ void removeEmptyStrings(vector<string>& strings)
   vector<string>::iterator it = remove_if(strings.begin(), strings.end(),mem_fun_ref(&string::empty));
   // erase the removed elements
   strings.erase(it, strings.end());
-}
+}  //removeEmptyStrings()
 	
 double castDouble(std::string i) {
 	double r = lexical_cast<double>(i);
 	return r;
-}  //goal is to replace temp var r
+}  //castDouble()
+
+simode_t getSIOption(boost::program_options::variables_map Map) {
+	if (Map.count("GiB") && Map.count("MiB") && Map.count("KiB")) {
+		return GMK;
+	}
+	else if (Map.count("GiB") && Map.count("MiB")) {
+		return GM;
+	}
+	else if (Map.count("GiB") && Map.count("KiB")) {
+		return GK;
+	}
+	else if (Map.count("MiB") && Map.count("KiB")) {
+		return MK;
+	}
+	else if (Map.count("GiB")) {
+		return G;
+	}
+	else if (Map.count("MiB")) {
+		return M;
+	}
+	else if (Map.count("KiB")) {
+		return K;
+	}
+	else {
+		return G;
+	}
+} // getSIOption()

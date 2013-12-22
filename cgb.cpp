@@ -106,97 +106,15 @@ int main(int ac, char** av) {
 			removeEmptyStrings(argss);
 		}
 		
-		if (vm.count("GiB") && vm.count("MiB") && vm.count("KiB")) {
-			for (unsigned int i=0; i < argss.size(); i++) {
-				
-				if (vm.count("enum")) {
-					resultOut(castDouble(argss[i]), i, GMK, 1, prec, maxlen);
-				} //if "enum" on cmd line
-				
-				else {
-					resultOut(castDouble(argss[i]), i, GMK, 0, prec, maxlen);
-				} //else enumeration wasn't requested
-			} //for
-		} // if -gmk
-		else if (vm.count("GiB") && vm.count("MiB")) {
-                        for (unsigned int i=0; i < argss.size(); i++) {
-                                
-				if (vm.count("enum")) {
-				      resultOut(castDouble(argss[i]), i, GM, 1, prec, maxlen);
-                                } //if "enum" on cmd line
-                                
-                                else {  
-				      resultOut(castDouble(argss[i]), i, GM, 0, prec, maxlen);
-                                } //else enumeration wasn't requested
-			} //for
-		} // if -gm
-		else if (vm.count("GiB") && vm.count("KiB")) {
-                        for (unsigned int i=0; i < argss.size(); i++) {
-                                
-				if (vm.count("enum")) {
-                                        resultOut(castDouble(argss[i]), i, GK, 1, prec, maxlen);
-                                } //if "enum" on cmd line
-                                else {
-                                        resultOut(castDouble(argss[i]), i, GK, 0, prec, maxlen);
-                                } //else enumeration wasn't requested
-	                } //for
-                } // if -gk
-		else if (vm.count("MiB") && vm.count("KiB")) {
-                        for (unsigned int i=0; i < argss.size(); i++) {
-                                
-				if (vm.count("enum")) {
-                                        resultOut(castDouble(argss[i]), i, MK, 1, prec, maxlen);
-                                } //if "enum" on cmd line
-                                else {	
-					resultOut(castDouble(argss[i]), i, MK, 0, prec, maxlen);
-                                } //else enumeration wasn't requested
-                        } //for
-                } // if -km
-                else if (vm.count("GiB")) {
-                        for (unsigned int i=0; i < argss.size(); i++) {
-                                				
-				if (vm.count("enum")) {
-                                        resultOut(castDouble(argss[i]), i, G, 1, prec, maxlen);
-                                } //if "enum" on cmd line
-                                else {
-                                        resultOut(castDouble(argss[i]), i, G, 0, prec, maxlen);
-                                } //else enumeration wasn't requested
-                        } //for
-                } //else if -g
-                else if (vm.count("MiB")) {
-                       for (unsigned int i=0; i < argss.size(); i++) {
-								
-				if (vm.count("enum")) {
-                                        resultOut(castDouble(argss[i]), i, M, 1, prec, maxlen);
-                                } //if "enum" on cmd line
-                                else {  
-                                        resultOut(castDouble(argss[i]), i, M, 0, prec, maxlen);
-                                } //else enumeration wasn't requested
-			} //for
-                } //else if m
-                else if (vm.count("KiB")) {
-			for (unsigned int i=0; i < argss.size(); i++) {
-								
-				if (vm.count("enum")) {
-                                        resultOut(castDouble(argss[i]), i, K, 1, prec, maxlen);
-                                } //if "enum" on cmd line
-                                else {  
-                                        resultOut(castDouble(argss[i]), i, K, 0, prec, maxlen);
-                                } //else enumeration wasn't requested
-				
-                        } //for
-                } //else if k
-                else {
-			for (unsigned int i=0; i < argss.size(); i++) {
-						
-				if (vm.count("enum")) {
-                                        resultOut(castDouble(argss[i]), i, G, 1, prec, maxlen);
-                                } //if "enum" on cmd line
-                                else {  
-                                        resultOut(castDouble(argss[i]), i, G, 0, prec, maxlen);
-                                } //else enumeration wasn't requested
-                        } //for
-                } //else - defaulting to GiB
+		
+		for (unsigned int i=0; i < argss.size(); i++) {
+			if (vm.count("enum")) {
+				resultOut(castDouble(argss[i]), i, getSIOption(vm), 1, prec, maxlen);
+			} //if "enum" on cmd line
+			else {
+				resultOut(castDouble(argss[i]), i, getSIOption(vm), 0, prec, maxlen);
+			} //else enumeration wasn't requested
+		} //main for loop
   	} //try 
 	
 	catch(std::exception& e) { 
