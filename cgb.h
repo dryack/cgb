@@ -184,4 +184,7 @@ void removeEmptyStrings(vector<string>& strings)
   strings.erase(it, strings.end());
 }
 	
-    
+double castDouble(std::string i) {
+	double r = lexical_cast<double>(i);
+	return r;
+}  //goal is to replace temp var r

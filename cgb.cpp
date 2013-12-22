@@ -108,97 +108,92 @@ int main(int ac, char** av) {
 		
 		if (vm.count("GiB") && vm.count("MiB") && vm.count("KiB")) {
 			for (unsigned int i=0; i < argss.size(); i++) {
-				double r = lexical_cast<double>(argss[i]);
+				
 				if (vm.count("enum")) {
-					resultOut(r, i, GMK, 1, prec, maxlen);
+					resultOut(castDouble(argss[i]), i, GMK, 1, prec, maxlen);
 				} //if "enum" on cmd line
 				
 				else {
-					resultOut(r, i, GMK, 0, prec, maxlen);
+					resultOut(castDouble(argss[i]), i, GMK, 0, prec, maxlen);
 				} //else enumeration wasn't requested
 			} //for
 		} // if -gmk
 		else if (vm.count("GiB") && vm.count("MiB")) {
                         for (unsigned int i=0; i < argss.size(); i++) {
-                                double r = lexical_cast<double>(argss[i]);
+                                
 				if (vm.count("enum")) {
-				      resultOut(r, i, GM, 1, prec, maxlen);
+				      resultOut(castDouble(argss[i]), i, GM, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 
                                 else {  
-				      resultOut(r, i, GM, 0, prec, maxlen);
+				      resultOut(castDouble(argss[i]), i, GM, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
 			} //for
 		} // if -gm
 		else if (vm.count("GiB") && vm.count("KiB")) {
                         for (unsigned int i=0; i < argss.size(); i++) {
-                                double r = lexical_cast<double>(argss[i]);
+                                
 				if (vm.count("enum")) {
-                                        resultOut(r, i, GK, 1, prec, maxlen);
+                                        resultOut(castDouble(argss[i]), i, GK, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 else {
-                                        resultOut(r, i, GK, 0, prec, maxlen);
+                                        resultOut(castDouble(argss[i]), i, GK, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
 	                } //for
                 } // if -gk
 		else if (vm.count("MiB") && vm.count("KiB")) {
                         for (unsigned int i=0; i < argss.size(); i++) {
-                                double r = lexical_cast<double>(argss[i]);
+                                
 				if (vm.count("enum")) {
-                                        resultOut(r, i, MK, 1, prec, maxlen);
+                                        resultOut(castDouble(argss[i]), i, MK, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 else {	
-					resultOut(r, i, MK, 0, prec, maxlen);
+					resultOut(castDouble(argss[i]), i, MK, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
                         } //for
                 } // if -km
                 else if (vm.count("GiB")) {
                         for (unsigned int i=0; i < argss.size(); i++) {
-                                double r = lexical_cast<double>(argss[i]);
-				
+                                				
 				if (vm.count("enum")) {
-                                        resultOut(r, i, G, 1, prec, maxlen);
+                                        resultOut(castDouble(argss[i]), i, G, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 else {
-                                        resultOut(r, i, G, 0, prec, maxlen);
+                                        resultOut(castDouble(argss[i]), i, G, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
                         } //for
                 } //else if -g
                 else if (vm.count("MiB")) {
                        for (unsigned int i=0; i < argss.size(); i++) {
-				double r = lexical_cast<double>(argss[i]);
-				
+								
 				if (vm.count("enum")) {
-                                        resultOut(r, i, M, 1, prec, maxlen);
+                                        resultOut(castDouble(argss[i]), i, M, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 else {  
-                                        resultOut(r, i, M, 0, prec, maxlen);
+                                        resultOut(castDouble(argss[i]), i, M, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
 			} //for
                 } //else if m
                 else if (vm.count("KiB")) {
 			for (unsigned int i=0; i < argss.size(); i++) {
-				double r = lexical_cast<double>(argss[i]);
-				
+								
 				if (vm.count("enum")) {
-                                        resultOut(r, i, K, 1, prec, maxlen);
+                                        resultOut(castDouble(argss[i]), i, K, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 else {  
-                                        resultOut(r, i, K, 0, prec, maxlen);
+                                        resultOut(castDouble(argss[i]), i, K, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
 				
                         } //for
                 } //else if k
                 else {
 			for (unsigned int i=0; i < argss.size(); i++) {
-                        
-                                double r = lexical_cast<double>(argss[i]);
 						
 				if (vm.count("enum")) {
-                                        resultOut(r, i, G, 1, prec, maxlen);
+                                        resultOut(castDouble(argss[i]), i, G, 1, prec, maxlen);
                                 } //if "enum" on cmd line
                                 else {  
-                                        resultOut(r, i, G, 0, prec, maxlen);
+                                        resultOut(castDouble(argss[i]), i, G, 0, prec, maxlen);
                                 } //else enumeration wasn't requested
                         } //for
                 } //else - defaulting to GiB
