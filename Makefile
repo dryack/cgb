@@ -3,6 +3,9 @@ SHELL = /bin/sh
 .SUFFIXES: .cpp .h .o
 CXX = g++
 LD = g++
+# release
+#CFLAGS = -Os -I/usr/local/include/boost/
+# debug
 CFLAGS = -ggdb3 -Wall -I/usr/local/include/boost/
 LDFLAGS = 
 RM = /bin/rm -f

@@ -23,7 +23,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "cgb.h"
 
 int main(int ac, char** av) {
-	unsigned int i = 0; // outside the for() loops so it can be modified when -p and/or -e are in use
 	unsigned int maxlen = 0; //max length of positional arguments; needed for formatting
 	std::vector<std::string> argss; //vector that will be holding arguments (values to be computed)
 	
@@ -80,7 +79,7 @@ int main(int ac, char** av) {
  			while (getline(cin, blah, '\n')) { //possible candidate for future options, changing getline behavior
 				argss.push_back(blah);
 			}
-			for (i; i < argss.size(); i++) {
+			for (unsigned int i=0; i < argss.size(); i++) {
 			//strip each positional argument of all non digits
 			//stripping spaces, probably not needed under 99% of cases; was required during more extreme tests
 			argss[i].erase(std::remove_if(argss[i].begin(), argss[i].end(), is_space()), argss[i].end());
@@ -95,7 +94,7 @@ int main(int ac, char** av) {
      		//vectorize positional arguments
 			std::vector<std::string> argsst(vm["compute-value"].as< vector<string> >());
 			
-			for (i; i < argsst.size(); i++) {
+			for (unsigned int i=0; i < argsst.size(); i++) {
 				//strip each positional argument of all non digits
 				argsst[i].erase(std::remove_if(argsst[i].begin(), argsst[i].end(), !is_digit()), argsst[i].end());
 				if (maxlen < argsst[i].length()) {
@@ -107,11 +106,8 @@ int main(int ac, char** av) {
 			removeEmptyStrings(argss);
 		}
 		
-		
-		i = 0;  //reset i for future iterations
-		
 		if (vm.count("GiB") && vm.count("MiB") && vm.count("KiB")) {
-			for (i; i < argss.size(); i++) {
+			for (unsigned int i=0; i < argss.size(); i++) {
 				double r = lexical_cast<double>(argss[i]);
 				if (vm.count("enum")) {
 					resultOut(r, i, GMK, 1, prec, maxlen);
@@ -123,7 +119,7 @@ int main(int ac, char** av) {
 			} //for
 		} // if -gmk
 		else if (vm.count("GiB") && vm.count("MiB")) {
-                        for (i; i < argss.size(); i++) {
+                        for (unsigned int i=0; i < argss.size(); i++) {
                                 double r = lexical_cast<double>(argss[i]);
 				if (vm.count("enum")) {
 				      resultOut(r, i, GM, 1, prec, maxlen);
@@ -135,7 +131,7 @@ int main(int ac, char** av) {
 			} //for
 		} // if -gm
 		else if (vm.count("GiB") && vm.count("KiB")) {
-                        for (i; i < argss.size(); i++) {
+                        for (unsigned int i=0; i < argss.size(); i++) {
                                 double r = lexical_cast<double>(argss[i]);
 				if (vm.count("enum")) {
                                         resultOut(r, i, GK, 1, prec, maxlen);
@@ -146,7 +142,7 @@ int main(int ac, char** av) {
 	                } //for
                 } // if -gk
 		else if (vm.count("MiB") && vm.count("KiB")) {
-                        for (i; i < argss.size(); i++) {
+                        for (unsigned int i=0; i < argss.size(); i++) {
                                 double r = lexical_cast<double>(argss[i]);
 				if (vm.count("enum")) {
                                         resultOut(r, i, MK, 1, prec, maxlen);
@@ -157,7 +153,7 @@ int main(int ac, char** av) {
                         } //for
                 } // if -km
                 else if (vm.count("GiB")) {
-                        for (i; i < argss.size(); i++) {
+                        for (unsigned int i=0; i < argss.size(); i++) {
                                 double r = lexical_cast<double>(argss[i]);
 				
 				if (vm.count("enum")) {
@@ -169,7 +165,7 @@ int main(int ac, char** av) {
                         } //for
                 } //else if -g
                 else if (vm.count("MiB")) {
-                       for (i; i < argss.size(); i++) {
+                       for (unsigned int i=0; i < argss.size(); i++) {
 				double r = lexical_cast<double>(argss[i]);
 				
 				if (vm.count("enum")) {
@@ -181,7 +177,7 @@ int main(int ac, char** av) {
 			} //for
                 } //else if m
                 else if (vm.count("KiB")) {
-			for (i; i < argss.size(); i++) {
+			for (unsigned int i=0; i < argss.size(); i++) {
 				double r = lexical_cast<double>(argss[i]);
 				
 				if (vm.count("enum")) {
@@ -194,7 +190,7 @@ int main(int ac, char** av) {
                         } //for
                 } //else if k
                 else {
-			for (i; i < argss.size(); i++) {
+			for (unsigned int i=0; i < argss.size(); i++) {
                         
                                 double r = lexical_cast<double>(argss[i]);
 						
