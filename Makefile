@@ -10,10 +10,11 @@ CFLAGS = -ggdb3 -Wall -I/usr/local/include/boost/
 LDFLAGS = 
 RM = /bin/rm -f
 OBJS = cgb.o
+STATIC_LIBS = /usr/lib64/libboost_program_options.so
 PROG = cgb
 
 $(PROG) : $(OBJS)
-	 $(LD) $(LDFLAGS) $(OBJS) /usr/lib64/libboost_program_options.so -o $(PROG)
+	 $(LD) $(LDFLAGS) $(OBJS) $(STATIC_LIBS) -o $(PROG)
 
 cgb.o: cgb.cpp cgb.h
 	$(CXX) $(CFLAGS) -c cgb.cpp
