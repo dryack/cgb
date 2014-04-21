@@ -68,6 +68,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n";
 
 enum simode_t {GMK = 0, GM = 1, GK = 2, MK = 3, M = 4, K = 5, G = 6};
 
+//////////////////////////////////////////////////////////////////////////////
+//  This function is accepting too many params; need to break it up at the
+//  very least.  Even better would be if it wasn't so long and hideous
+//////////////////////////////////////////////////////////////////////////////
+
 void resultOut(double x, int y, int z, int a, unsigned int b, unsigned int c) {
     //x = argss[i] passed via r
     //y = i
@@ -189,6 +194,16 @@ double castDouble(std::string i) {
 	return r;
 }  //castDouble()
 
+
+////////////////////////////////////////
+//  Pretty ugly... can we improve it?
+//
+//  Since we're successfully passing
+//  the command line args, this is 
+//  also a reminder that almost all
+//  the code in cgp.cpp can be nicely
+//  broken up.
+////////////////////////////////////////
 simode_t getSIOption(boost::program_options::variables_map Map) {
 	if (Map.count("GiB") && Map.count("MiB") && Map.count("KiB")) {
 		return GMK;

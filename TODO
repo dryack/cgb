@@ -16,3 +16,4 @@
 			[done]	-(./cgb -p<int>e will cause a caught failure - which is probably ok?)
                     [done]  -fix unusual option mixes that fail without warning/output (./cgb -gmke; -gmkp<int>;  -gmkp<int>e)
 - ./cgb invoked with any option, but without any numbers supplied by pipe or command line will fail with a caught error
+- improve code

@@ -74,6 +74,10 @@ int main(int ac, char** av) {
       			return ERROR_IN_COMMAND_LINE; 
     		} //catch errs
     		
+            ///////////////////////////////////////////////////////////////////////////////////
+            //  In this block of code, I'd like to break the check for data via pipe or not
+            //  into it's own method
+            ///////////////////////////////////////////////////////////////////////////////////
     		if (!isatty(fileno(stdin))) { //checking for data via pipe
 			std::string blah;
  			while (getline(cin, blah, '\n')) { //possible candidate for future options, changing getline behavior
@@ -89,9 +93,11 @@ int main(int ac, char** av) {
 				}
 			}
 			removeEmptyStrings(argss); //remove empty strings from vector in just in case
- 		} //data coming from pipe
-		else { //data not coming from pipe
-			
+ 		    } //data coming from pipe
+		    else { //data not coming from pipe
+			////////////////////////////////////////////////////////////////////////////////////
+
+
 			//vectorize positional arguments
 			std::vector<std::string> argsst(vm["compute-value"].as< vector<string> >());
 			
@@ -105,7 +111,7 @@ int main(int ac, char** av) {
 			argss.assign(argsst.begin(),argsst.end()); //due to scoping, this version of the vector
 								   //needs to be copied to argss
 			removeEmptyStrings(argss);//remove empty strings from vector in just in case
-		} //data NOT coming from pipe
+		    } //data NOT coming from pipe
 		
 		
 		for (unsigned int i=0; i < argss.size(); i++) {
