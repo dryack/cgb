@@ -50,7 +50,7 @@ const double KiB = 1024.0;
 unsigned int prec = 2; //default precision
 const string progv = "cgb 0.99f";
 const string bugaddy = "<git.lamashtu@gmail.com>";
-const string licenseS = " The MIT License (MIT)\n Copyright (c) 2013 David Ryack\n \
+const string licenseS = " The MIT License (MIT)\n Copyright (c) 2013-2018 David Ryack\n \
 Permission is hereby granted, free of charge, to any person obtaining a copy of\n \
 this software and associated documentation files (the \"Software\"), to deal in\n \
 the Software without restriction, including without limitation the rights to\n \
